@@ -1,6 +1,31 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Layout from '../components/layout';
 import { onRegistration} from '../api/auth';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+
+function Copyright(props) {
+  return (
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+      {'Copyright © '}
+      <Link color="inherit" href="https://jonathan-woodruff.github.io">
+        Jonathan Woodruff
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
+
+const defaultTheme = createTheme();
 
 const Register = () => {
     const [values, setValues] = useState({
@@ -12,6 +37,7 @@ const Register = () => {
 
     const handleChange = (e) => {
       setValues({ ...values, [e.target.name]: e.target.value});
+      return console.log(values)
     };
 
     const handleSubmit = async (e) => {
@@ -30,38 +56,70 @@ const Register = () => {
 
     return (
       <Layout>
-        <form onSubmit={(e) => handleSubmit(e) } className='container mt-3'>
-          <h1>Register</h1>
-          <div className='mb-3'>
-            <label htmlFor='email' className='form-label'>Email Address</label>
-            <input
-              onChange={ (e) => handleChange(e) }
-              type='email'
-              className='form-control'
-              id='email'
-              name='email'
-              value={ values.email }
-              placeholder='test@gmail.com'
-              required
-            />
-          </div>
-          <div className='mb-3'>
-            <label htmlFor = 'password' className='form-label'>Password</label>
-            <input
-              onChange={ (e) => handleChange(e) }
-              type='password'
-              className='form-control'
-              id='password'
-              name='password'
-              value={ values.password }
-              placeholder='password'
-              required
-            />
-          </div>
-          <div style={{ color: 'red', margin: '10px 0'}}>{ error }</div>
-          <div style={{ color: 'green', margin: '10px 0'}}>{ success }</div>
-          <button type='submit' className='btn btn-primary'>Submit</button>
-        </form>
+        <ThemeProvider theme={defaultTheme}>
+          <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <Box
+              sx={{
+                marginTop: 8,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <Typography component="h1" variant="h5">
+                Sign up
+              </Typography>
+              <Box component="form" noValidate onSubmit={ (e) => handleSubmit(e) } sx={{ mt: 3 }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      id="email"
+                      label="Email Address"
+                      name="email"
+                      value={ values.email }
+                      autoComplete="email"
+                      onChange={ (e) => handleChange(e) }
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      name="password"
+                      label="Password"
+                      type="password"
+                      id="password"
+                      value={ values.password }
+                      autoComplete="new-password"
+                      onChange={ (e) => handleChange(e) }
+                    />
+                  </Grid>
+                </Grid>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Sign Up
+                </Button>
+                <Grid container justifyContent="center">
+                  <Grid item>
+                    <Link href="/login" variant="body2">
+                      Already have an account? Sign in
+                    </Link>
+                  </Grid>
+                </Grid>
+              </Box>
+              <div style={{ color: 'red', margin: '10px 0'}}>{ error }</div>
+              <div style={{ color: 'green', margin: '10px 0'}}>{ success }</div>
+            </Box>
+            <Copyright sx={{ mt: 5 }} />
+          </Container>
+        </ThemeProvider>
       </Layout>
     )
   };

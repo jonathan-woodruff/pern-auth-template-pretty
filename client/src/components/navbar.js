@@ -1,36 +1,30 @@
-import { NavLink } from 'react-router-dom';
+import { AppBar, Toolbar, IconButton, Typography, Stack, Button } from '@mui/material';
+import EggIcon from '@mui/icons-material/Egg';
 import { useSelector } from 'react-redux';
+
 
 export const Navbar = () => {
     const { isAuth } = useSelector(state => state.auth);
     return (
-        <nav className = 'navbar navbar-light bg-light'>
-            <div className = 'container'>
-                <div>
-                    <NavLink to='/'>
-                        <span className='navbar-brand mb-0 h1'>Home</span>
-                    </NavLink>
-                </div>
-
+        <AppBar position='static'>
+            <Toolbar>
+                <IconButton size='large' edge='start' color='inherit' aria-label='home icon'>
+                    <EggIcon />
+                </IconButton>
+                <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
+                    Got Groceries
+                </Typography>
                 {isAuth ? (
-                    <div>
-                        <NavLink to='/dashboard' className='mx-3'>
-                            <span>Dashboard</span>
-                        </NavLink>
-                    </div>
+                    <Stack direction='row' spacing={3}>
+                        <Button color='inherit'>Dashboard</Button>
+                    </Stack>
                 ) : (
-                    <div>
-                        <NavLink to='/login'>
-                            <span>Login</span>
-                        </NavLink>
-
-                        <NavLink to='/register' className='mx-3'>
-                            <span>Register</span>
-                        </NavLink>
-                    </div>
-
+                    <Stack direction='row' spacing={3}>
+                        <Button color='inherit'>Log in</Button>
+                        <Button color='inherit'>Sign Up Free</Button>
+                    </Stack>
                 )}
-            </div>
-        </nav>
+            </Toolbar>
+        </AppBar>
     );
 };
