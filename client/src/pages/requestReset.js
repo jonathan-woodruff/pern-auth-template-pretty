@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Layout from '../components/layout';
-import { onLogin} from '../api/auth';
+import { onRequestReset } from '../api/auth';
 import { useDispatch } from 'react-redux';
 import { authenticateUser } from '../redux/slices/authSlice';
 import Button from '@mui/material/Button';
@@ -31,15 +31,13 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-const Login = () => {
-    const [values, setValues] = useState({
-      email: '',
-      password: ''
-    });
+const RequestReset = () => {
+    const [email, setEmail] = useState('');
     const [error, setError] = useState(false);
+    const [emailSent, setEmailSent] = useState(false);
 
     const handleChange = (e) => {
-      setValues({ ...values, [e.target.name]: e.target.value});
+      setEmail(e.target.value);
     };
 
     const dispatch = useDispatch();
@@ -47,9 +45,9 @@ const Login = () => {
     const handleSubmit = async (e) => {
       e.preventDefault();
       try {
-        await onLogin(values); //the server sends back a token/cookie
-        dispatch(authenticateUser());
-        localStorage.setItem('isAuth', 'true');
+        await onRequestReset(email); //the server sends back a token/cookie
+        setEmailSent(true);
+        setError(false);
       } catch(error) {
         console.log(error.response.data.errors[0].msg); //error from axios
         setError(error.response.data.errors[0].msg);
@@ -70,7 +68,7 @@ const Login = () => {
               }}
             >
               <Typography component="h1" variant="h5">
-                Sign in
+                Let's reset your password
               </Typography>
               <Box component="form" onSubmit={ (e) => handleSubmit(e) } noValidate sx={{ mt: 1 }}>
                 <TextField
@@ -80,47 +78,29 @@ const Login = () => {
                   id="email"
                   label="Email Address"
                   name="email"
-                  value={ values.email }
+                  value={ email }
                   onChange={ (e) => handleChange(e) }
                   autoComplete="email"
                   autoFocus
                 />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  value={ values.password }
-                  onChange={ (e) => handleChange(e) }
-                  autoComplete="current-password"
-                />
-                {/*<FormControlLabel
-                  control={<Checkbox value="remember" color="primary" />}
-                  label="Remember me"
-            />*/}
                 <Button
                   type="submit"
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
                 >
-                  Sign In
+                  Reset
                 </Button>
-                <Grid container>
-                  <Grid item xs>
-                    <Link href="/request-reset" variant="body2">
-                      Forgot password?
-                    </Link>
-                  </Grid>
-                  <Grid item>
-                    <Link href="/register" variant="body2">
-                      {"Don't have an account? Sign Up"}
-                    </Link>
-                  </Grid>
-                </Grid>
+                { emailSent && 
+                    <Typography component="h3" variant="h6" sx={{ color: 'green' }}>
+                        Success! Check your email for a link to reset your password.
+                    </Typography> 
+                }
+                { error &&
+                    <Typography component="h3" variant="h6" sx={{ color: 'red' }}>
+                        Email does not exist. <Link href='/register'>Try signing up with a new account.</Link>
+                    </Typography>
+                }
               </Box>
             </Box>
             <Copyright sx={{ mt: 8, mb: 4 }} />
@@ -130,4 +110,4 @@ const Login = () => {
     )
   };
   
-  export default Login;
+  export default RequestReset;

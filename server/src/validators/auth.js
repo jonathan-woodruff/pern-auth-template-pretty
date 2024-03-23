@@ -33,7 +33,18 @@ const loginFieldsCheck = check('email').custom(async (value, { req }) => {
     req.user = user.rows[0];
 });
 
+//ensure the email exists (used for password reset)
+const ensureEmailExists = check('email').custom(async (value) => {
+    const { rows } = await db.query(`SELECT * FROM users WHERE email = $1`, [value])
+
+    if (!rows.length) {
+        throw new Error('Email does not exist');
+    }
+});
+
+
 module.exports = {
     registerValidation: [email, password, emailExists],
-    loginValidation: [loginFieldsCheck]
+    loginValidation: [loginFieldsCheck],
+    requestResetValidation: [ensureEmailExists]
 };

@@ -77,3 +77,23 @@ exports.logout = async (req, res) => {
         });
     }
 };
+
+exports.requestReset = async (req, res) => {
+    const userEmail = req.email;
+    const payload = {
+        email: userEmail
+    };
+    
+    try {
+        const token = await sign(payload, SECRET, { expiresIn: 60 * 5 }); //create jwt token that expires in 5 minutes
+        return res.status(200).cookie('token', token, { httpOnly: true }).json({ //send the user a cookie
+            success: true,
+            message: 'Reset request received'
+        })
+    } catch(error) {
+        console.log(error.message);
+        res.status(500).json({
+            error: error.message
+        });
+    }
+};

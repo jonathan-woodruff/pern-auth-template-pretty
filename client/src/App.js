@@ -3,6 +3,7 @@ import Home from './pages/home';
 import Dashboard from './pages/dashboard';
 import Register from './pages/register';
 import Login from './pages/login';
+import RequestReset from './pages/requestReset';
 import { useSelector } from 'react-redux';
 
 const PrivateRoutes = () => {
@@ -36,6 +37,7 @@ const App = () => {
         <Route element={ <RestrictedRoutes /> } >
           <Route path='/register' element={ <Register /> } />
           <Route path='/login' element={ <Login /> } />
+          <Route path='/request-reset' element={ <RequestReset /> } />
         </Route>
       </Routes>
     </BrowserRouter>

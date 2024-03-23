@@ -11,6 +11,10 @@ export async function onLogin(loginData) {
     return await axios.post('http://localhost:8000/api/login', loginData);
 };
 
+export async function onRequestReset(emailData) {
+    return await axios.post('http://localhost:8000/api/request-reset', emailData);
+};
+
 export async function onLogout() {
     return await axios.get('http://localhost:8000/api/logout');
 };
