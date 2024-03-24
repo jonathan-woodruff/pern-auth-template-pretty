@@ -14,6 +14,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+/* https://www.youtube.com/watch?v=HtJKUQXmtok */
 
 
 function Copyright(props) {
@@ -34,15 +35,24 @@ const defaultTheme = createTheme();
 const Login = () => {
     const [values, setValues] = useState({
       email: '',
-      password: ''
+      password: '',
+      isChecked: true
     });
     const [error, setError] = useState(false);
+
+    const dispatch = useDispatch();
 
     const handleChange = (e) => {
       setValues({ ...values, [e.target.name]: e.target.value});
     };
 
-    const dispatch = useDispatch();
+    const toggleChecked = () => {
+      if (values.isChecked) {
+        setValues({ ...values, isChecked: false});
+      } else {
+        setValues({ ...values, isChecked: true});
+      }    
+    };
 
     const handleSubmit = async (e) => {
       e.preventDefault();
@@ -70,7 +80,7 @@ const Login = () => {
               }}
             >
               <Typography component="h1" variant="h5">
-                Sign in
+                Log in
               </Typography>
               <Box component="form" onSubmit={ (e) => handleSubmit(e) } noValidate sx={{ mt: 1 }}>
                 <TextField
@@ -97,17 +107,17 @@ const Login = () => {
                   onChange={ (e) => handleChange(e) }
                   autoComplete="current-password"
                 />
-                {/*<FormControlLabel
-                  control={<Checkbox value="remember" color="primary" />}
+                <FormControlLabel
+                  control={<Checkbox checked={ values.isChecked } color="primary" onChange={ () => toggleChecked() } />}
                   label="Remember me"
-            />*/}
+                />
                 <Button
                   type="submit"
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
                 >
-                  Sign In
+                  Log In
                 </Button>
                 <Grid container>
                   <Grid item xs>

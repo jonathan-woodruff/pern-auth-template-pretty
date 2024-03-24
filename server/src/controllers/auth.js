@@ -2,6 +2,7 @@ const db = require('../db');
 const { hash } = require('bcrypt');
 const { sign } = require('jsonwebtoken');
 const { SECRET } = require('../constants/index');
+const { useSelector } = require
 
 exports.getUsers = async (req, res) => {
     try {
@@ -38,9 +39,11 @@ exports.login = async (req, res) => {
         id: user.user_id,
         email: user.email
     };
+    const rememberUser = req.body.isChecked; //true or false if the user selected to be remembered upon login
+    const expiryTime = rememberUser ? 60 * 60 * 24 * 365 : 60 * 60 * 24; //365 days or 1 day
     
     try {
-        const token = await sign(payload, SECRET); //create jwt token
+        const token = await sign(payload, SECRET, { expiresIn: expiryTime }); //create jwt token
         return res.status(200).cookie('token', token, { httpOnly: true }).json({ //send the user a cookie
             success: true,
             message: 'Logged in successfully'
@@ -78,6 +81,7 @@ exports.logout = async (req, res) => {
     }
 };
 
+/*
 exports.requestReset = async (req, res) => {
     const userEmail = req.email;
     const payload = {
@@ -97,3 +101,23 @@ exports.requestReset = async (req, res) => {
         });
     }
 };
+
+exports.resetPassword = async (req, res) => {
+    const user = req.user;
+    const id = user.id;
+    const password = user.password;
+    try {
+        const hashedPassword = await hash(password, 10);
+        await db.query(`UPDATE users SET password = $1 WHERE user_id = $2`, [hashedPassword, id]);
+        return res.status(204).json({
+            success: true,
+            message: 'The password was updated successfully.'
+        });
+    } catch(error) {
+        console.log(error.message);
+        res.status(500).json({
+            error: error.message
+        });
+    }
+};
+*/

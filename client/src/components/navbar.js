@@ -1,9 +1,24 @@
 import { AppBar, Toolbar, IconButton, Typography, Stack, Button } from '@mui/material';
 import EggIcon from '@mui/icons-material/Egg';
-import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { onLogout } from '../api/auth';
+import { unauthenticateUser } from '../redux/slices/authSlice';
 
 
 export const Navbar = () => {
+    const dispatch = useDispatch();
+
+    const logout = async () => {
+        try {
+            await onLogout();
+            dispatch(unauthenticateUser());
+            localStorage.removeItem('isAuth');
+        } catch(error) {
+            console.log(error.response);
+        }
+    };
+
     const { isAuth } = useSelector(state => state.auth);
     return (
         <AppBar position='static'>
@@ -17,11 +32,12 @@ export const Navbar = () => {
                 {isAuth ? (
                     <Stack direction='row' spacing={3}>
                         <Button color='inherit'>Dashboard</Button>
+                        <Button color='inherit' onClick={ () => logout() }>Log out</Button>
                     </Stack>
                 ) : (
                     <Stack direction='row' spacing={3}>
-                        <Button color='inherit'>Log in</Button>
-                        <Button color='inherit'>Sign Up Free</Button>
+                        <Button color='inherit' component={Link} to={`http://localhost:3000/login`}>Log in</Button>
+                        <Button color='inherit' component={Link} to={`http://localhost:3000/register`}>Sign Up Free</Button>
                     </Stack>
                 )}
             </Toolbar>

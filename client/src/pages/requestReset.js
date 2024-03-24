@@ -1,3 +1,4 @@
+/*
 import React, { useState } from 'react';
 import Layout from '../components/layout';
 import { onRequestReset } from '../api/auth';
@@ -40,12 +41,10 @@ const RequestReset = () => {
       setEmail(e.target.value);
     };
 
-    const dispatch = useDispatch();
-
     const handleSubmit = async (e) => {
       e.preventDefault();
       try {
-        await onRequestReset(email); //the server sends back a token/cookie
+        await onRequestReset({ email: email }); //the server sends back a token/cookie
         setEmailSent(true);
         setError(false);
       } catch(error) {
@@ -89,16 +88,16 @@ const RequestReset = () => {
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
                 >
-                  Reset
+                  Continue
                 </Button>
                 { emailSent && 
-                    <Typography component="h3" variant="h6" sx={{ color: 'green' }}>
-                        Success! Check your email for a link to reset your password.
+                    <Typography component="h3" variant="h6" sx={{ color: 'green', fontSize: '16px' }}>
+                        Got it! Check your email for a link to reset your password.
                     </Typography> 
                 }
                 { error &&
-                    <Typography component="h3" variant="h6" sx={{ color: 'red' }}>
-                        Email does not exist. <Link href='/register'>Try signing up with a new account.</Link>
+                    <Typography component="h3" variant="h6" sx={{ color: 'red', fontSize: '16px' }}>
+                        { error }
                     </Typography>
                 }
               </Box>
@@ -111,3 +110,5 @@ const RequestReset = () => {
   };
   
   export default RequestReset;
+
+*/

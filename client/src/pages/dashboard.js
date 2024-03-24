@@ -42,7 +42,6 @@ const Dashboard = () => {
       <Layout>
         <h1>Dashboard</h1>
         <h2>{ protectedData }</h2>
-        <button onClick={ () => logout() } className='btn btn-primary'>Logout</button> 
       </Layout>
     </div>
   )
