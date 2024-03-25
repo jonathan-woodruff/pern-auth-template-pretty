@@ -17,7 +17,10 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 //import { GoogleLogin } from '@react-oauth/google';
 //import { jwtDecode } from 'jwt-decode';
 
-/* https://www.youtube.com/watch?v=yICiz12SdI4 */
+/* 
+*good: https://www.youtube.com/watch?v=yICiz12SdI4 
+*better: https://www.youtube.com/watch?v=7K9kDrtc4S8
+*/
 
 
 function Copyright(props) {
