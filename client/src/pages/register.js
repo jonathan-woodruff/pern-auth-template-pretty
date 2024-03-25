@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Layout from '../components/layout';
-import { onRegistration} from '../api/auth';
+import { onRegistration } from '../api/auth';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';

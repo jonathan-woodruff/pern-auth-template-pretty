@@ -3,7 +3,7 @@ import EggIcon from '@mui/icons-material/Egg';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { onLogout } from '../api/auth';
-import { unauthenticateUser } from '../redux/slices/authSlice';
+import { unauthenticateUser, setNotSSO } from '../redux/slices/authSlice';
 
 
 export const Navbar = () => {
@@ -12,6 +12,7 @@ export const Navbar = () => {
     const logout = async () => {
         try {
             await onLogout();
+            dispatch(setNotSSO());
             dispatch(unauthenticateUser());
             localStorage.removeItem('isAuth');
         } catch(error) {
@@ -19,7 +20,7 @@ export const Navbar = () => {
         }
     };
 
-    const { isAuth } = useSelector(state => state.auth);
+    const { isAuth, ssoLogin } = useSelector(state => state.auth);
     return (
         <AppBar position='static'>
             <Toolbar>
@@ -29,7 +30,7 @@ export const Navbar = () => {
                 <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
                     Got Groceries
                 </Typography>
-                {isAuth ? (
+                {isAuth || ssoLogin ? (
                     <Stack direction='row' spacing={3}>
                         <Button color='inherit'>Dashboard</Button>
                         <Button color='inherit' onClick={ () => logout() }>Log out</Button>

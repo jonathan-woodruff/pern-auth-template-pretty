@@ -2,7 +2,6 @@ const db = require('../db');
 const { hash } = require('bcrypt');
 const { sign } = require('jsonwebtoken');
 const { SECRET } = require('../constants/index');
-const { useSelector } = require
 
 exports.getUsers = async (req, res) => {
     try {
@@ -56,6 +55,50 @@ exports.login = async (req, res) => {
     }
 };
 
+exports.loginFailed = (req, res) => {
+    res.status(401).json({
+        success: false,
+        message: 'failure'
+    })
+};
+
+exports.loginSuccess = (req, res) => { 
+    //passport.js will send a user in the request if successful
+    if (req.user) {
+        res.status(200).json({
+            success: true,
+            message: 'successful',
+            user: req.user
+        })
+    } else{
+        res.status(401).json({
+            success: false,
+            message: 'login successful but no user in the request'
+        })
+    }
+};
+
+/*
+exports.sso = async (req, res) => {
+    const ssoToken = req.body.ssoToken;
+    const payload = {
+        ssoToken: ssoToken
+    };
+    
+    try {
+        const token = await sign(payload, SECRET); //create jwt token
+        return res.status(200).cookie('token', token, { httpOnly: true }).json({ //send the user a cookie
+            success: true,
+            message: 'Logged in successfully'
+        })
+    } catch(error) {
+        console.log(error.message);
+        res.status(500).json({
+            error: error.message
+        });
+    }
+};*/
+
 exports.protected = async (req, res) => {
     try {
         return res.status(200).json({
@@ -69,6 +112,7 @@ exports.protected = async (req, res) => {
 //delete the cookie/token
 exports.logout = async (req, res) => {
     try {
+        req.logout();
         return res.status(200).clearCookie('token', { httpOnly: true }).json({ //send the user a cookie
             success: true,
             message: 'Logged out successfully'
@@ -80,6 +124,18 @@ exports.logout = async (req, res) => {
         });
     }
 };
+
+/*
+//get the Google Client Id
+exports.getGoogleClientId = async (req, res) => {
+    try {
+        return res.status(200).json({
+            googleClientId: GOOGLE_CLIENT_ID
+        });
+    } catch(error) {
+        console.log(error.message);
+    }
+};*/
 
 /*
 exports.requestReset = async (req, res) => {

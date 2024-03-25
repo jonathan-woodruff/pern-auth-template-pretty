@@ -9,7 +9,8 @@ const userAuthFromLocalStorage = () => {
 };
 
 const initialState = {
-    isAuth: userAuthFromLocalStorage()
+    isAuth: userAuthFromLocalStorage(),
+    ssoLogin: false
 };
 
 export const authSlice = createSlice({
@@ -21,10 +22,16 @@ export const authSlice = createSlice({
         },
         unauthenticateUser: (state) => {
             state.isAuth = false;
+        },
+        setSSO: (state) => {
+            state.ssoLogin = true;
+        },
+        setNotSSO: (state) => {
+            state.ssoLogin = false;
         }
     }
 });
 
-export const { authenticateUser, unauthenticateUser} = authSlice.actions;
+export const { authenticateUser, unauthenticateUser, setSSO, setNotSSO } = authSlice.actions;
 
 export default authSlice.reducer;

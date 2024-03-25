@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Layout from '../components/layout';
-import { onLogin} from '../api/auth';
+import { onLogin } from '../api/auth';
 import { useDispatch } from 'react-redux';
-import { authenticateUser } from '../redux/slices/authSlice';
+import { authenticateUser, setNotSSO } from '../redux/slices/authSlice';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -14,7 +14,10 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-/* https://www.youtube.com/watch?v=HtJKUQXmtok */
+//import { GoogleLogin } from '@react-oauth/google';
+//import { jwtDecode } from 'jwt-decode';
+
+/* https://www.youtube.com/watch?v=yICiz12SdI4 */
 
 
 function Copyright(props) {
@@ -39,6 +42,7 @@ const Login = () => {
       isChecked: true
     });
     const [error, setError] = useState(false);
+    //const [ssoToken, setSSOToken] = useState({ ssoToken: null });
 
     const dispatch = useDispatch();
 
@@ -58,6 +62,7 @@ const Login = () => {
       e.preventDefault();
       try {
         await onLogin(values); //the server sends back a token/cookie
+        dispatch(setNotSSO());
         dispatch(authenticateUser());
         localStorage.setItem('isAuth', 'true');
       } catch(error) {
@@ -65,6 +70,23 @@ const Login = () => {
         setError(error.response.data.errors[0].msg);
       }
     };
+
+    const google = () => {
+      window.open('http://localhost:8000/auth/google', '_self')
+    };
+
+    /*
+    const handleSSO = async () => {
+      try {
+        await onSSO(ssoToken);
+        dispatch(authenticateUser());
+        localStorage.setItem('isAuth', 'true');
+      } catch(error) {
+        console.log(error.response.data.errors[0].msg); //error from axios
+        setError(error.response.data.errors[0].msg);
+      }
+    };
+    */
 
     return (
       <Layout>
@@ -82,6 +104,23 @@ const Login = () => {
               <Typography component="h1" variant="h5">
                 Log in
               </Typography>
+              {/*<GoogleLogin
+                onSuccess={credentialResponse => {
+                  const decoded = jwtDecode(credentialResponse.credential);
+                  console.log(decoded);
+                }}
+                onError={() => {
+                  console.log('Login Failed');
+                }}
+              />*/}
+              <Button
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                  onClick={ google }
+                >
+                  Google
+                </Button>
               <Box component="form" onSubmit={ (e) => handleSubmit(e) } noValidate sx={{ mt: 1 }}>
                 <TextField
                   margin="normal"
