@@ -18,7 +18,7 @@ router.post('/login', loginValidation, validationMiddleware, login)
 router.get('/logout', logout);
 router.get('/login/failed', loginFailed);
 router.get('/login/success', loginSuccess);
-router.get('/google', passport.authenticate('google', { scope: ['profile'] }));
+router.get('/google', passport.authenticate('google', { scope: ['profile','email'] }));
 router.get('/google/callback', passport.authenticate('google', {
     successRedirect: 'http://localhost:3000/dashboard',
     failureRedirect: '/auth/login/failed'

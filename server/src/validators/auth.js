@@ -8,9 +8,9 @@ const password = check('password').isLength({ min: 6, max: 15}).withMessage('Pas
 //email
 const email = check('email').isEmail().withMessage('Please enter a valid email address.');
 
-//check if email exists
+//check if email and password combination exists
 const emailExists = check('email').custom(async (value) => {
-    const { rows } = await db.query(`SELECT * FROM users WHERE email = $1`, [value])
+    const { rows } = await db.query(`SELECT * FROM users WHERE email = $1 AND password IS NOT NULL`, [value])
 
     if (rows.length) {
         throw new Error('Email already exists');

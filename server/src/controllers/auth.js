@@ -19,7 +19,12 @@ exports.register = async (req, res) => {
     const { email, password } = req.body;
     try {
         const hashedPassword = await hash(password, 10);
-        await db.query(`INSERT INTO users (email, password) VALUES ($1, $2)`, [email, hashedPassword]);
+        const { rows } = await db.query(`SELECT * FROM users WHERE email = $1`, [email])
+        if (rows.length) {
+            await db.query(`UPDATE users SET password = $1 WHERE email = $2`, [hashedPassword, email])
+        } else {
+            await db.query(`INSERT INTO users (email, password) VALUES ($1, $2)`, [email, hashedPassword]);
+        }
         return res.status(201).json({
             success: true,
             message: 'The registration was successful'
