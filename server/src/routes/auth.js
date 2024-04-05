@@ -22,7 +22,7 @@ router.get('/google', passport.authenticate('google', { scope: ['profile','email
 router.get('/google/callback', passport.authenticate('google', {
     successRedirect: 'http://localhost:3000/dashboard',
     failureRedirect: '/auth/login/failed'
-}))
+}));
 //router.get('/google-client-id', getGoogleClientId);
 //router.post('/sso', sso)
 //router.post('/request-reset', requestResetValidation, validationMiddleware, requestReset);

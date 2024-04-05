@@ -123,7 +123,7 @@ const Login = () => {
                   onClick={ google }
                 >
                   Google
-                </Button>
+              </Button>
               <Box component="form" onSubmit={ (e) => handleSubmit(e) } noValidate sx={{ mt: 1 }}>
                 <TextField
                   margin="normal"

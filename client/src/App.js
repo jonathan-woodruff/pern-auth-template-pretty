@@ -58,8 +58,6 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={ <Home /> } />
-
         <Route element={ <PrivateRoutes /> } >
           <Route path='/dashboard' element={ <Dashboard ssoLogin={ssoLogin} /> } />
         </Route>
@@ -67,6 +65,7 @@ const App = () => {
         <Route element={ <RestrictedRoutes /> } >
           <Route path='/register' element={ <Register /> } />
           <Route path='/login' element={ <Login /> } />
+          <Route path='/' element={ <Login /> } />
           {/*<Route path='/request-reset' element={ <RequestReset /> } />*/}
         </Route>
       </Routes>

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Layout from '../components/layout';
 import { onRegistration } from '../api/auth';
+import { useDispatch } from 'react-redux';
+import { authenticateUser, setNotSSO } from '../redux/slices/authSlice';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -35,6 +37,8 @@ const Register = () => {
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
 
+    const dispatch = useDispatch();
+
     const handleChange = (e) => {
       setValues({ ...values, [e.target.name]: e.target.value});
       return console.log(values)
@@ -47,11 +51,18 @@ const Register = () => {
         setError('');
         setSuccess(data.message);
         setValues({ email: '', password: '' });
+        dispatch(setNotSSO());
+        dispatch(authenticateUser());
+        localStorage.setItem('isAuth', 'true');
       } catch(error) {
         console.log(error.response.data.errors[0].msg); //error from axios
         setError(error.response.data.errors[0].msg);
         setSuccess('');
       }
+    };
+
+    const google = () => {
+      window.open('http://localhost:8000/auth/google', '_self')
     };
 
     return (
@@ -70,6 +81,14 @@ const Register = () => {
               <Typography component="h1" variant="h5">
                 Sign up
               </Typography>
+              <Button
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                  onClick={ google }
+                >
+                  Google
+              </Button>
               <Box component="form" noValidate onSubmit={ (e) => handleSubmit(e) } sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>

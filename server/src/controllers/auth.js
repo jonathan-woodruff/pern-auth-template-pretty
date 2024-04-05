@@ -19,13 +19,19 @@ exports.register = async (req, res) => {
     const { email, password } = req.body;
     try {
         const hashedPassword = await hash(password, 10);
-        const { rows } = await db.query(`SELECT * FROM users WHERE email = $1`, [email])
-        if (rows.length) {
-            await db.query(`UPDATE users SET password = $1 WHERE email = $2`, [hashedPassword, email])
+        let q = await db.query(`SELECT * FROM users WHERE email = $1`, [email]);
+        if (q.rows.length) {
+            await db.query(`UPDATE users SET password = $1 WHERE email = $2`, [hashedPassword, email]);
         } else {
             await db.query(`INSERT INTO users (email, password) VALUES ($1, $2)`, [email, hashedPassword]);
         }
-        return res.status(201).json({
+        q = await db.query(`SELECT * FROM users WHERE email = $1`, [email]);
+        const payload = { 
+            id: q.rows[0].user_id,
+            email: email 
+        };
+        const token = await sign(payload, SECRET, { expiresIn: 60 * 60 * 24 }); //create jwt token
+        return res.status(201).cookie('token', token, { httpOnly: true, secure: true }).json({
             success: true,
             message: 'The registration was successful'
         });
@@ -48,7 +54,7 @@ exports.login = async (req, res) => {
     
     try {
         const token = await sign(payload, SECRET, { expiresIn: expiryTime }); //create jwt token
-        return res.status(200).cookie('token', token, { httpOnly: true }).json({ //send the user a cookie
+        return res.status(200).cookie('token', token, { httpOnly: true, secure: true }).json({ //send the user a cookie
             success: true,
             message: 'Logged in successfully'
         })
@@ -118,7 +124,7 @@ exports.protected = async (req, res) => {
 exports.logout = async (req, res) => {
     try {
         req.logout();
-        return res.status(200).clearCookie('token', { httpOnly: true }).json({ //send the user a cookie
+        return res.status(200).clearCookie('token', { httpOnly: true, secure: true }).json({ //send the user a cookie
             success: true,
             message: 'Logged out successfully'
         })
