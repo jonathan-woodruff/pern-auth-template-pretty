@@ -3,12 +3,14 @@
 import axios from 'axios';
 axios.defaults.withCredentials = true; //send the cookie back to the server with token
 
+const serverURL = 'http://localhost:8000';
+
 export async function onRegistration(registrationData) {
-    return await axios.post('http://localhost:8000/auth/register', registrationData);
+    return await axios.post(`${serverURL}/auth/register`, registrationData);
 };
 
 export async function onLogin(loginData) {
-    return await axios.post('http://localhost:8000/auth/login', loginData);
+    return await axios.post(`${serverURL}/auth/login`, loginData);
 };
 
 /*export async function onRequestReset(emailData) {
@@ -16,19 +18,19 @@ export async function onLogin(loginData) {
 };*/
 
 export async function onLogout() {
-    return await axios.get('http://localhost:8000/auth/logout');
+    return await axios.get(`${serverURL}/auth/logout`);
 };
 
 export async function fetchProtectedInfo() {
-    return await axios.get('http://localhost:8000/auth/protected');
+    return await axios.get(`${serverURL}/auth/protected`);
 };
 
 export async function fetchProtectedInfoSSO() {
-    return await axios.get('http://localhost:8000/auth/protected-sso');
+    return await axios.get(`${serverURL}/auth/protected-sso`);
 };
 
 export async function onSSOSuccess() {
-    return await axios.get('http://localhost:8000/auth/login/success');
+    return await axios.get(`${serverURL}/auth/login/success`);
 };
 
 /*export async function getGoogleClientId() {

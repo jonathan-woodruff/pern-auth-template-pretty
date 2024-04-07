@@ -70,7 +70,7 @@ exports.loginFailed = (req, res) => {
     res.status(401).json({
         success: false,
         message: 'failure'
-    })
+    });
 };
 
 exports.loginSuccess = (req, res) => { 
@@ -110,9 +110,10 @@ exports.sso = async (req, res) => {
     }
 };*/
 
-exports.protected = async (req, res) => {
+exports.protected = (req, res) => {
     try {
-        return res.status(200).json({
+        console.log('heyyyyyyyy ' + req.user.email);
+        res.status(200).json({
             info: 'protected info'
         });
     } catch(error) {

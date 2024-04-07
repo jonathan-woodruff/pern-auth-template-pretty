@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Layout from '../components/layout';
 import { onRegistration } from '../api/auth';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { authenticateUser, setNotSSO } from '../redux/slices/authSlice';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -61,8 +61,10 @@ const Register = () => {
       }
     };
 
+    const { serverURL } = useSelector(state => state.glob);
+
     const google = () => {
-      window.open('http://localhost:8000/auth/google', '_self')
+      window.open(`${serverURL}/auth/google`, '_self' /*'Google SSO Popup', 'height=500, width=500, left=100, top=100'*/);
     };
 
     return (

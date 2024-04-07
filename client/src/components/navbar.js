@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { onLogout } from '../api/auth';
 import { unauthenticateUser, setNotSSO } from '../redux/slices/authSlice';
 
-
 export const Navbar = () => {
     const dispatch = useDispatch();
 
@@ -21,6 +20,7 @@ export const Navbar = () => {
     };
 
     const { isAuth, ssoLogin } = useSelector(state => state.auth);
+    const { clientURL } = useSelector(state => state.glob);
     return (
         <AppBar position='static'>
             <Toolbar>
@@ -37,8 +37,8 @@ export const Navbar = () => {
                     </Stack>
                 ) : (
                     <Stack direction='row' spacing={3}>
-                        <Button color='inherit' component={Link} to={`http://localhost:3000/login`}>Log in</Button>
-                        <Button color='inherit' component={Link} to={`http://localhost:3000/register`}>Sign Up Free</Button>
+                        <Button color='inherit' component={Link} to={`${clientURL}/login`}>Log in</Button>
+                        <Button color='inherit' component={Link} to={`${clientURL}/register`}>Sign Up Free</Button>
                     </Stack>
                 )}
             </Toolbar>

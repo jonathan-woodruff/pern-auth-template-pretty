@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Layout from '../components/layout';
 import { onLogin } from '../api/auth';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { authenticateUser, setNotSSO } from '../redux/slices/authSlice';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -65,6 +65,7 @@ const Login = () => {
       e.preventDefault();
       try {
         await onLogin(values); //the server sends back a token/cookie
+        setError('');
         dispatch(setNotSSO());
         dispatch(authenticateUser());
         localStorage.setItem('isAuth', 'true');
@@ -74,8 +75,10 @@ const Login = () => {
       }
     };
 
+    const { serverURL } = useSelector(state => state.glob);
+
     const google = () => {
-      window.open('http://localhost:8000/auth/google', '_self')
+      window.open(`${serverURL}/auth/google`, '_self')
     };
 
     /*
@@ -169,6 +172,7 @@ const Login = () => {
                   </Grid>
                 </Grid>
               </Box>
+              <div style={{ color: 'red', margin: '10px 0'}}>{ error }</div>
             </Box>
             <Copyright sx={{ mt: 8, mb: 4 }} />
           </Container>
