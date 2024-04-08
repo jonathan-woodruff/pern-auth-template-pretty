@@ -3,7 +3,7 @@ import EggIcon from '@mui/icons-material/Egg';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { onLogout } from '../api/auth';
-import { unauthenticateUser, setNotSSO } from '../redux/slices/authSlice';
+import { unauthenticateUser, notSSO, assignUser } from '../redux/slices/authSlice';
 
 export const Navbar = () => {
     const dispatch = useDispatch();
@@ -11,8 +11,9 @@ export const Navbar = () => {
     const logout = async () => {
         try {
             await onLogout();
-            dispatch(setNotSSO());
+            dispatch(notSSO());
             dispatch(unauthenticateUser());
+            dispatch(assignUser({ user_email: null }));
             localStorage.removeItem('isAuth');
         } catch(error) {
             console.log(error.response);

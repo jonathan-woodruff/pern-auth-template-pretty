@@ -6,11 +6,13 @@ const db = require('../db/index');
 passport.use(new GoogleStrategy({
     clientID: GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: GOOGLE_CALLBACK_URL
-}, async (accessToken, refreshToken, profile, done) => { //This is the callback function that google will call upon authentication. accessToken is what you use to access Google's API. Since accessToken expires after a day or two, refreshToken is used to request another accessToken. profile contains the info we told Google to get for us using scopes
+    callbackURL: GOOGLE_CALLBACK_URL,
+    passReqToCallback: true
+}, async (req, accessToken, refreshToken, profile, done) => { //This is the callback function that google will call upon authentication. accessToken is what you use to access Google's API. Since accessToken expires after a day or two, refreshToken is used to request another accessToken. profile contains the info we told Google to get for us using scopes
 
     const email = profile.emails[0].value;
     const googleId = profile.id;
+    req.user = { user_email: email };
 
     try {
         //check if user already has an sso account

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Layout from '../components/layout';
 import { onLogin } from '../api/auth';
 import { useDispatch, useSelector } from 'react-redux';
-import { authenticateUser, setNotSSO } from '../redux/slices/authSlice';
+import { authenticateUser, notSSO, sso, assignUser } from '../redux/slices/authSlice';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -14,6 +14,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 //import { GoogleLogin } from '@react-oauth/google';
 //import { jwtDecode } from 'jwt-decode';
 
@@ -64,21 +65,29 @@ const Login = () => {
     const handleSubmit = async (e) => {
       e.preventDefault();
       try {
-        await onLogin(values); //the server sends back a token/cookie
+        const { data } = await onLogin(values); //the server sends back a token/cookie
+        const payload = {
+          user_email: data.user_email
+        };
         setError('');
-        dispatch(setNotSSO());
+        dispatch(notSSO());
+        dispatch(assignUser(payload));
         dispatch(authenticateUser());
         localStorage.setItem('isAuth', 'true');
       } catch(error) {
-        console.log(error.response.data.errors[0].msg); //error from axios
-        setError(error.response.data.errors[0].msg);
+        let errorMessage = error.response.data.errors[0].msg;
+        if (errorMessage === 'data and hash arguments required') {
+          errorMessage = 'Sign in with Google, or sign up with a password';
+        }
+        console.log(errorMessage); //error from axios
+        setError(errorMessage);
       }
     };
 
     const { serverURL } = useSelector(state => state.glob);
 
     const google = () => {
-      window.open(`${serverURL}/auth/google`, '_self')
+      window.open(`${serverURL}/auth/google`, '_self');
     };
 
     /*

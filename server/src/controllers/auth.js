@@ -26,14 +26,16 @@ exports.register = async (req, res) => {
             await db.query(`INSERT INTO users (email, password) VALUES ($1, $2)`, [email, hashedPassword]);
         }
         q = await db.query(`SELECT * FROM users WHERE email = $1`, [email]);
+        const user_id = q.rows[0].user_id;
         const payload = { 
-            id: q.rows[0].user_id,
+            id: user_id,
             email: email 
         };
         const token = await sign(payload, SECRET, { expiresIn: 60 * 60 * 24 }); //create jwt token
         return res.status(201).cookie('token', token, { httpOnly: true, secure: true }).json({
             success: true,
-            message: 'The registration was successful'
+            message: 'The registration was successful',
+            user_email: email
         });
     } catch(error) {
         console.log(error.message);
@@ -56,7 +58,8 @@ exports.login = async (req, res) => {
         const token = await sign(payload, SECRET, { expiresIn: expiryTime }); //create jwt token
         return res.status(200).cookie('token', token, { httpOnly: true, secure: true }).json({ //send the user a cookie
             success: true,
-            message: 'Logged in successfully'
+            message: 'Logged in successfully',
+            user_email: user.email
         })
     } catch(error) {
         console.log(error.message);
@@ -112,7 +115,6 @@ exports.sso = async (req, res) => {
 
 exports.protected = (req, res) => {
     try {
-        console.log('heyyyyyyyy ' + req.user.email);
         res.status(200).json({
             info: 'protected info'
         });

@@ -19,13 +19,16 @@ router.get('/login/failed', loginFailed);
 router.get('/login/success', loginSuccess);
 router.get('/google', passport.authenticate('google', { scope: ['profile','email'] }));
 router.get(
-    '/google/callback', 
+    '/google/callback',
+    /*(req, res) => {
+        console.log(req.user.emails[0].value);
+    },*/
     passport.authenticate('google', {
         scope: ['profile', 'email'],
         successRedirect: `${CLIENT_URL}/dashboard`,
         failureRedirect: '/auth/login/failed'
-    }
-));
+    })
+);
 //router.get('/google-client-id', getGoogleClientId);
 //router.post('/sso', sso)
 //router.post('/request-reset', requestResetValidation, validationMiddleware, requestReset);

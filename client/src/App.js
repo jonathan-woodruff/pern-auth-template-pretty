@@ -7,10 +7,45 @@ import { useEffect, useState } from 'react';
 //import RequestReset from './pages/requestReset';
 import { useSelector, useDispatch } from 'react-redux';
 import { onSSOSuccess } from './api/auth';
-import { setSSO } from './redux/slices/authSlice';
+import { sso, assignUser } from './redux/slices/authSlice';
 
-const PrivateRoutes = () => {
+const PrivateRoutes =  () => {
+  const dispatch = useDispatch();
   const { isAuth, ssoLogin } = useSelector(state => state.auth);
+
+  //check if the user successfully authenticated with sso
+  if (!isAuth && !ssoLogin) {
+    const getUser = () => {
+      onSSOSuccess().then(response => {
+        if(response.status === 200) {
+          dispatch(sso());
+          return response;
+        }
+        throw new Error('authentication failed');
+      })
+      .then(responseObject => {
+        dispatch(assignUser({ user_email: responseObject.data.user.emails[0].value }));
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    };
+    getUser();
+    /*try {
+      console.log('hi');
+      const response = onSSOSuccess();
+      console.log(response);
+      if (response.status === 200) {
+        dispatch(sso());
+        setSSOLogged(true);
+        const payload = { user_email: response.data.user.emails[0].value };
+        dispatch(assignUser(payload));
+      }
+    } catch(error) {
+      console.log(error);
+    }*/
+  }
+  console.log('sso status: ' + ssoLogin);
   return (
     <>
       { isAuth || ssoLogin ? <Outlet /> : <Navigate to='/login'/> }
@@ -31,7 +66,7 @@ const RestrictedRoutes = () => {
 const App = () => {
   const [user, setUser] = useState(null);
   const { ssoLogin } = useSelector(state => state.auth);
-
+  /*
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -54,6 +89,7 @@ const App = () => {
   }, []);
 
   console.log(user);
+  */
 
   return (
     <BrowserRouter>

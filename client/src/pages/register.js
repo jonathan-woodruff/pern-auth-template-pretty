@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Layout from '../components/layout';
 import { onRegistration } from '../api/auth';
 import { useDispatch, useSelector } from 'react-redux';
-import { authenticateUser, setNotSSO } from '../redux/slices/authSlice';
+import { authenticateUser, notSSO, sso, assignUser } from '../redux/slices/authSlice';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -48,10 +48,14 @@ const Register = () => {
       e.preventDefault();
       try {
         const { data } = await onRegistration(values);
+        const payload = {
+          user_email: data.user_email
+        }
         setError('');
         setSuccess(data.message);
         setValues({ email: '', password: '' });
-        dispatch(setNotSSO());
+        dispatch(notSSO());
+        dispatch(assignUser(payload));
         dispatch(authenticateUser());
         localStorage.setItem('isAuth', 'true');
       } catch(error) {
