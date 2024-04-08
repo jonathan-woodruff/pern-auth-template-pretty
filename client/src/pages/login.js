@@ -3,6 +3,7 @@ import Layout from '../components/layout';
 import { onLogin } from '../api/auth';
 import { useDispatch, useSelector } from 'react-redux';
 import { authenticateUser, notSSO, assignUser } from '../redux/slices/authSlice';
+import GoogleButton from 'react-google-button'
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -97,14 +98,6 @@ const Login = () => {
               <Typography component="h1" variant="h5">
                 Log in
               </Typography>
-              <Button
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                  onClick={ google }
-                >
-                  Google
-              </Button>
               <Box component="form" onSubmit={ (e) => handleSubmit(e) } noValidate sx={{ mt: 1 }}>
                 <TextField
                   margin="normal"
@@ -138,19 +131,23 @@ const Login = () => {
                   type="submit"
                   fullWidth
                   variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
+                  sx={{ mt: 2, mb: 2 }}
                 >
                   Log In
                 </Button>
-                <Grid container>
+                <Grid container justifyContent="center">
                   <Grid item>
                     <Link href="/register" variant="body2">
-                      {"Don't have an account? Sign Up"}
+                      Don't have an account? Sign Up
                     </Link>
                   </Grid>
                 </Grid>
+                <div style={{ color: 'red', margin: '10px 0', textAlign: 'center' }}>{ error }</div>
               </Box>
-              <div style={{ color: 'red', margin: '10px 0'}}>{ error }</div>
+              <Typography component="h2" variant="h6" sx={{ margin: '20px 0 10px 0', fontWeight: 'normal' }}>
+                Or...
+              </Typography>
+              <GoogleButton onClick={ () => google() } />
             </Box>
             <Copyright sx={{ mt: 8, mb: 4 }} />
           </Container>

@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import Layout from '../components/layout';
 import { onRegistration } from '../api/auth';
 import { useDispatch, useSelector } from 'react-redux';
-import { authenticateUser, notSSO, sso, assignUser } from '../redux/slices/authSlice';
+import { authenticateUser, notSSO, assignUser } from '../redux/slices/authSlice';
+import GoogleButton from 'react-google-button'
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -87,14 +88,6 @@ const Register = () => {
               <Typography component="h1" variant="h5">
                 Sign up
               </Typography>
-              <Button
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                  onClick={ google }
-                >
-                  Google
-              </Button>
               <Box component="form" noValidate onSubmit={ (e) => handleSubmit(e) } sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
@@ -134,13 +127,17 @@ const Register = () => {
                 <Grid container justifyContent="center">
                   <Grid item>
                     <Link href="/login" variant="body2">
-                      Already have an account? Sign in
+                      Already have an account? Log in
                     </Link>
                   </Grid>
                 </Grid>
+                <div style={{ color: 'red', margin: '10px 0', textAlign: 'center' }}>{ error }</div>
+                <div style={{ color: 'green', margin: '10px 0', textAlign: 'center' }}>{ success }</div>
               </Box>
-              <div style={{ color: 'red', margin: '10px 0'}}>{ error }</div>
-              <div style={{ color: 'green', margin: '10px 0'}}>{ success }</div>
+              <Typography component="h2" variant="h6" sx={{ margin: '20px 0 10px 0', fontWeight: 'normal' }}>
+                Or...
+              </Typography>
+              <GoogleButton onClick={ () => google() } />
             </Box>
             <Copyright sx={{ mt: 5 }} />
           </Container>
