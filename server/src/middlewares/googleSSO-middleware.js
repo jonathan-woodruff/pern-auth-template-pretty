@@ -32,21 +32,6 @@ passport.use(new GoogleStrategy({
         console.log(error.message);
         done(error, null);
     }
-    
-    /*const userEmail = profile.emails[0].value;
-    const googleId = profile.id;
-
-    try {
-        const { user } = await db.query(`SELECT email FROM users WHERE email = $1`, [userEmail]);
-        if (!user.length) {
-            await db.query(`INSERT INTO users (email, google_id) VALUES ($1, $2)`, [userEmail, googleId]);
-        }
-    } catch(error) {
-        console.log(error.message);
-        done(error, null);
-    }
-
-    if (user && user[0]) return done(null, user && user[0]);*/
 }));
 
 
@@ -57,18 +42,3 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((user, done) => {
     done(null, user);
 });
-
-/*
-passport.deserializeUser(async (id, done) => {
-    try {
-        const { user } = await db.query(`SELECT user_id FROM users WHERE user_id = $1`, [id]);
-    } catch(error) {
-        console.log('Error deserializing: ', error);
-        done(error, null);
-    }
-
-    console.log('Deserialized user: ', user);
-    if (user) done(null, user);
-    
-});
-*/

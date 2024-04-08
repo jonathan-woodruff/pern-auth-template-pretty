@@ -3,14 +3,12 @@ import { useDispatch } from 'react-redux';
 import { fetchProtectedInfo, fetchProtectedInfoSSO, onLogout } from '../api/auth';
 import Layout from '../components/layout';
 import { unauthenticateUser } from '../redux/slices/authSlice';
-import { onSSOSuccess } from '../api/auth';
-import { sso, assignUser } from '../redux/slices/authSlice';
+
 
 const Dashboard = ({ ssoLogin }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [protectedData, setProtectedData] = useState(null);
-  const [user, setUser] = useState(null);
 
   const logout = async () => {
     try {

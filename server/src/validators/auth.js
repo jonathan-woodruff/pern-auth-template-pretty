@@ -32,33 +32,8 @@ const loginFieldsCheck = check('email').custom(async (value, { req }) => {
 
     req.user = user.rows[0];
 });
-/*
-//when requesting to send a password reset email, ensure the email exists in the database
-const ensureEmailExists = check('email').custom(async (value) => {
-    const { rows } = await db.query(`SELECT * FROM users WHERE email = $1`, [value])
-
-    if (!rows.length) {
-        throw new Error('Email does not exist. Try a different email, or sign up.');
-    }
-});
-
-//when submitting a new password for reset, check that the passwords match
-const passwordsMatch = check('password').custom(async (value, { req }) => {
-    const user = await db.query(`SELECT * FROM users WHERE email = $1`, [value]);
-    if (!user.rows.length) {
-        throw new Error('Email does not exist');
-    }
-    
-    if (value !== req.body.password2) {
-        throw new Error('Passwords must be the same.')
-    }
-});
-*/
-
 
 module.exports = {
     registerValidation: [email, password, emailExists],
-    loginValidation: [loginFieldsCheck]/*,
-    requestResetValidation: [email, ensureEmailExists],
-    passwordResetValidation: [password, passwordsMatch]*/
+    loginValidation: [loginFieldsCheck]
 };

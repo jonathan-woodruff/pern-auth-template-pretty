@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Layout from '../components/layout';
 import { onLogin } from '../api/auth';
 import { useDispatch, useSelector } from 'react-redux';
-import { authenticateUser, notSSO, sso, assignUser } from '../redux/slices/authSlice';
+import { authenticateUser, notSSO, assignUser } from '../redux/slices/authSlice';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -14,14 +14,6 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-//import { GoogleLogin } from '@react-oauth/google';
-//import { jwtDecode } from 'jwt-decode';
-
-/* 
-*good: https://www.youtube.com/watch?v=yICiz12SdI4 
-*better: https://www.youtube.com/watch?v=7K9kDrtc4S8
-*/
 
 
 function Copyright(props) {
@@ -46,7 +38,6 @@ const Login = () => {
       isChecked: true
     });
     const [error, setError] = useState(false);
-    //const [ssoToken, setSSOToken] = useState({ ssoToken: null });
 
     const dispatch = useDispatch();
 
@@ -90,19 +81,6 @@ const Login = () => {
       window.open(`${serverURL}/auth/google`, '_self');
     };
 
-    /*
-    const handleSSO = async () => {
-      try {
-        await onSSO(ssoToken);
-        dispatch(authenticateUser());
-        localStorage.setItem('isAuth', 'true');
-      } catch(error) {
-        console.log(error.response.data.errors[0].msg); //error from axios
-        setError(error.response.data.errors[0].msg);
-      }
-    };
-    */
-
     return (
       <Layout>
         <ThemeProvider theme={defaultTheme}>
@@ -119,15 +97,6 @@ const Login = () => {
               <Typography component="h1" variant="h5">
                 Log in
               </Typography>
-              {/*<GoogleLogin
-                onSuccess={credentialResponse => {
-                  const decoded = jwtDecode(credentialResponse.credential);
-                  console.log(decoded);
-                }}
-                onError={() => {
-                  console.log('Login Failed');
-                }}
-              />*/}
               <Button
                   fullWidth
                   variant="contained"

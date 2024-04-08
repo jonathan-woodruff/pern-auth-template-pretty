@@ -92,27 +92,6 @@ exports.loginSuccess = (req, res) => {
     }
 };
 
-/*
-exports.sso = async (req, res) => {
-    const ssoToken = req.body.ssoToken;
-    const payload = {
-        ssoToken: ssoToken
-    };
-    
-    try {
-        const token = await sign(payload, SECRET); //create jwt token
-        return res.status(200).cookie('token', token, { httpOnly: true }).json({ //send the user a cookie
-            success: true,
-            message: 'Logged in successfully'
-        })
-    } catch(error) {
-        console.log(error.message);
-        res.status(500).json({
-            error: error.message
-        });
-    }
-};*/
-
 exports.protected = (req, res) => {
     try {
         res.status(200).json({
@@ -138,56 +117,3 @@ exports.logout = async (req, res) => {
         });
     }
 };
-
-/*
-//get the Google Client Id
-exports.getGoogleClientId = async (req, res) => {
-    try {
-        return res.status(200).json({
-            googleClientId: GOOGLE_CLIENT_ID
-        });
-    } catch(error) {
-        console.log(error.message);
-    }
-};*/
-
-/*
-exports.requestReset = async (req, res) => {
-    const userEmail = req.email;
-    const payload = {
-        email: userEmail
-    };
-    
-    try {
-        const token = await sign(payload, SECRET, { expiresIn: 60 * 5 }); //create jwt token that expires in 5 minutes
-        return res.status(200).cookie('token', token, { httpOnly: true }).json({ //send the user a cookie
-            success: true,
-            message: 'Reset request received'
-        })
-    } catch(error) {
-        console.log(error.message);
-        res.status(500).json({
-            error: error.message
-        });
-    }
-};
-
-exports.resetPassword = async (req, res) => {
-    const user = req.user;
-    const id = user.id;
-    const password = user.password;
-    try {
-        const hashedPassword = await hash(password, 10);
-        await db.query(`UPDATE users SET password = $1 WHERE user_id = $2`, [hashedPassword, id]);
-        return res.status(204).json({
-            success: true,
-            message: 'The password was updated successfully.'
-        });
-    } catch(error) {
-        console.log(error.message);
-        res.status(500).json({
-            error: error.message
-        });
-    }
-};
-*/

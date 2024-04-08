@@ -5,8 +5,7 @@ const { registerValidation, loginValidation } = require('../validators/auth');
 const { validationMiddleware } = require('../middlewares/validation-middleware');
 const { userAuth } = require('../middlewares/auth-middleware');
 const { ssoAuth } = require('../middlewares/sso-auth-middleware');
-const passport = require('passport');
-const { CLIENT_URL } = require('../constants/index');
+const { ssoAuthCallback } = require('../middlewares/sso-auth-callback');
 
 
 router.get('/get-users', getUsers);
@@ -17,21 +16,7 @@ router.post('/login', loginValidation, validationMiddleware, login)
 router.get('/logout', logout);
 router.get('/login/failed', loginFailed);
 router.get('/login/success', loginSuccess);
-router.get('/google', passport.authenticate('google', { scope: ['profile','email'] }));
-router.get(
-    '/google/callback',
-    /*(req, res) => {
-        console.log(req.user.emails[0].value);
-    },*/
-    passport.authenticate('google', {
-        scope: ['profile', 'email'],
-        successRedirect: `${CLIENT_URL}/dashboard`,
-        failureRedirect: '/auth/login/failed'
-    })
-);
-//router.get('/google-client-id', getGoogleClientId);
-//router.post('/sso', sso)
-//router.post('/request-reset', requestResetValidation, validationMiddleware, requestReset);
-//router.put('/password-reset', passwordResetValidation, validationMiddleware, resetPassword);
+router.get('/google', ssoAuth);
+router.get('/google/callback', ssoAuthCallback);
 
 module.exports = router;
