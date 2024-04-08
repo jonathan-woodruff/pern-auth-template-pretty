@@ -1,3 +1,5 @@
+/* Use this to define variables that can be used anywhere on the client */
+
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {

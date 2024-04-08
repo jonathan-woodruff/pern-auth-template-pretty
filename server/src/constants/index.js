@@ -1,3 +1,5 @@
+/* file for storing private constants that can be used anywhere server-side */
+
 const { config } = require('dotenv');
 config();
 

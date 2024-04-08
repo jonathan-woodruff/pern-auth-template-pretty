@@ -1,3 +1,5 @@
+/* Login page */
+
 import React, { useState } from 'react';
 import Layout from '../components/layout';
 import { onLogin } from '../api/auth';
@@ -79,7 +81,7 @@ const Login = () => {
     const { serverURL } = useSelector(state => state.glob);
 
     const google = () => {
-      window.open(`${serverURL}/auth/google`, '_self');
+      window.open(`${serverURL}/auth/google`, '_self'); //server call
     };
 
     return (

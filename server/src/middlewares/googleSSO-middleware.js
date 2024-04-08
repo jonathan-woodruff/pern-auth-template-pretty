@@ -1,3 +1,5 @@
+/* This is called from src/index.js when the user selects their email to attempt sso. It manages the user in the database and serializes/deserializes the user. */
+
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_CALLBACK_URL } = require('../constants/index');
@@ -6,8 +8,8 @@ const db = require('../db/index');
 passport.use(new GoogleStrategy({
     clientID: GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: GOOGLE_CALLBACK_URL,
-    passReqToCallback: true
+    callbackURL: GOOGLE_CALLBACK_URL, //upon finishing, it will call the specified route in routes/auth.js
+    passReqToCallback: true //this lets you set req.user and to use it elsewhere like in controllers/auth.js login success
 }, async (req, accessToken, refreshToken, profile, done) => { //This is the callback function that google will call upon authentication. accessToken is what you use to access Google's API. Since accessToken expires after a day or two, refreshToken is used to request another accessToken. profile contains the info we told Google to get for us using scopes
 
     const email = profile.emails[0].value;
@@ -21,7 +23,7 @@ passport.use(new GoogleStrategy({
             return done(null, profile);
         }
         q = await db.query(`SELECT email FROM users WHERE email = $1`, [email]);
-        if (q.rows.length) {
+        if (q.rows.length) { //if the user already has an email (and password) in the database...
             await db.query(`UPDATE users SET google_id = $1 WHERE email = $2`, [googleId, email]);
             return done(null, profile);
         } else {

@@ -1,3 +1,5 @@
+/* sign-up page */
+
 import React, { useState } from 'react';
 import Layout from '../components/layout';
 import { onRegistration } from '../api/auth';
@@ -69,7 +71,7 @@ const Register = () => {
     const { serverURL } = useSelector(state => state.glob);
 
     const google = () => {
-      window.open(`${serverURL}/auth/google`, '_self' /*'Google SSO Popup', 'height=500, width=500, left=100, top=100'*/);
+      window.open(`${serverURL}/auth/google`, '_self'); //server call
     };
 
     return (

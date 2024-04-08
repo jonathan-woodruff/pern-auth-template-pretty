@@ -1,19 +1,25 @@
+/* Dashboard page that the user sees upon authentication */
+/* When the dashboard page loads, useEffect will check if the user is authenticated. If so, it will show the private information. If the user is not authenticated, it will log them out */
+
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchProtectedInfo, fetchProtectedInfoSSO, onLogout } from '../api/auth';
 import Layout from '../components/layout';
-import { unauthenticateUser } from '../redux/slices/authSlice';
+import { unauthenticateUser, notSSO, assignUser } from '../redux/slices/authSlice';
 
 
-const Dashboard = ({ ssoLogin }) => {
+const Dashboard = () => {
   const dispatch = useDispatch();
+  const { ssoLogin } = useSelector(state => state.auth);
   const [loading, setLoading] = useState(true);
   const [protectedData, setProtectedData] = useState(null);
 
   const logout = async () => {
     try {
       await onLogout();
+      dispatch(notSSO());
       dispatch(unauthenticateUser());
+      dispatch(assignUser({ user_email: null }));
       localStorage.removeItem('isAuth');
     } catch(error) {
       console.log(error.response);

@@ -1,3 +1,5 @@
+/* connect to the database */
+
 const { DB_USER, DB_HOST, DB_DATABASE, DB_PASSWORD, DB_PORT } = require('../constants/index');
 
 const { Pool } = require('pg');

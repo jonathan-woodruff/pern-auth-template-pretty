@@ -1,3 +1,5 @@
+/* middlewares to run upon the server getting requests */
+
 const db = require('../db');
 const { hash } = require('bcrypt');
 const { sign } = require('jsonwebtoken');
@@ -15,15 +17,15 @@ exports.getUsers = async (req, res) => {
     }
 };
 
-exports.register = async (req, res) => {
+exports.register = async (req, res) => { //user is trying to sign up with an email and password
     const { email, password } = req.body;
     try {
         const hashedPassword = await hash(password, 10);
         let q = await db.query(`SELECT * FROM users WHERE email = $1`, [email]);
-        if (q.rows.length) {
-            await db.query(`UPDATE users SET password = $1 WHERE email = $2`, [hashedPassword, email]);
+        if (q.rows.length) { //validators/auth.js already ensured the user doesn't already have an email/password combination, so if the user has an email in the database, that means they previously signed up with sso
+            await db.query(`UPDATE users SET password = $1 WHERE email = $2`, [hashedPassword, email]); //user already exists with sso but not with password, so set their password in the database
         } else {
-            await db.query(`INSERT INTO users (email, password) VALUES ($1, $2)`, [email, hashedPassword]);
+            await db.query(`INSERT INTO users (email, password) VALUES ($1, $2)`, [email, hashedPassword]); //user doesn't exist in the database, so add new record
         }
         q = await db.query(`SELECT * FROM users WHERE email = $1`, [email]);
         const user_id = q.rows[0].user_id;
@@ -32,7 +34,7 @@ exports.register = async (req, res) => {
             email: email 
         };
         const token = await sign(payload, SECRET, { expiresIn: 60 * 60 * 24 }); //create jwt token
-        return res.status(201).cookie('token', token, { httpOnly: true, secure: true }).json({
+        return res.status(201).cookie('token', token, { httpOnly: true, secure: true }).json({ //create cookie
             success: true,
             message: 'The registration was successful',
             user_email: email

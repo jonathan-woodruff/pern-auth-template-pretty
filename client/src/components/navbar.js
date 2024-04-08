@@ -1,3 +1,5 @@
+/* This page defines the navbar at the right-hand side of the header */
+
 import { AppBar, Toolbar, IconButton, Typography, Stack, Button } from '@mui/material';
 import EggIcon from '@mui/icons-material/Egg';
 import { Link } from 'react-router-dom';

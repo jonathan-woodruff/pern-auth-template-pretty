@@ -1,3 +1,5 @@
+/* authentication state handling */
+
 import { createSlice } from '@reduxjs/toolkit';
 
 const userAuthFromLocalStorage = () => {

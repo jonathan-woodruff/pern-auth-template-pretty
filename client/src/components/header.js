@@ -1,3 +1,5 @@
+/* This file defines the header that is present on every page */
+
 import EggOutlinedIcon from '@mui/icons-material/EggOutlined';
 import { Container, CssBaseline, Box, Typography, IconButton } from '@mui/material';
 

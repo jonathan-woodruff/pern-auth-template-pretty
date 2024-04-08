@@ -1,3 +1,5 @@
+/* This handles requests from the client */
+
 const { Router } = require('express');
 const router = Router();
 const { getUsers, register, login, protected, logout, loginFailed, loginSuccess } = require('../controllers/auth');

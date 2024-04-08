@@ -10,12 +10,12 @@ const PrivateRoutes =  () => {
   const dispatch = useDispatch();
   const { isAuth, ssoLogin } = useSelector(state => state.auth);
 
-  //check if the user successfully authenticated with sso
   if (!isAuth && !ssoLogin) {
+    //check if the user successfully authenticated with sso
     const getUser = () => {
       onSSOSuccess().then(response => {
         if(response.status === 200) {
-          dispatch(sso());
+          dispatch(sso()); //update state to indicate the user authenticated with sso
           return response;
         }
         throw new Error('authentication failed');
@@ -29,7 +29,7 @@ const PrivateRoutes =  () => {
     };
     getUser();
   }
-  return (
+  return ( //Outlet is the respective child element of Private Routes. For example, below you nest Dashboard under PrivateRoutes, so Outlet would be Dashboard in that case.
     <>
       { isAuth || ssoLogin ? <Outlet /> : <Navigate to='/login'/> }
     </>
@@ -47,13 +47,12 @@ const RestrictedRoutes = () => {
 
 
 const App = () => {
-  const { ssoLogin } = useSelector(state => state.auth);
 
   return (
     <BrowserRouter>
       <Routes>
         <Route element={ <PrivateRoutes /> } >
-          <Route path='/dashboard' element={ <Dashboard ssoLogin={ssoLogin} /> } />
+          <Route path='/dashboard' element={ <Dashboard /> } />
         </Route>
 
         <Route element={ <RestrictedRoutes /> } >

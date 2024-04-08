@@ -1,3 +1,5 @@
+/* server side validation for field entries */
+
 const { check } = require('express-validator');
 const db = require('../db');
 const { compare } = require('bcrypt');
