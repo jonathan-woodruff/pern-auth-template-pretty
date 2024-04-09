@@ -1,3 +1,5 @@
+/* This protects the routes, ensuring that any private pages are being viewed by a valid user in the database and that the client has the proper cookie */
+
 const passport = require('passport');
 const { Strategy } = require('passport-jwt');
 const { SECRET } = require('../constants/index');

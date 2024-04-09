@@ -11,16 +11,16 @@ require('./middlewares/passport-middleware');
 require('./middlewares/googleSSO-middleware');
 
 //initialize middlewares
-app.use(express.json());
-app.use(cookieParser());
+app.use(express.json()); //enables you to parse requests using json payloads
+app.use(cookieParser()); //This helps the server parse the cookie and allows you to access the cookie with req.cookies as you do in passport-middleware.js
 app.use(cors({ origin: CLIENT_URL, credentials: true }));
-app.use(passport.initialize());
-app.use(cookieSession({
+app.use(passport.initialize()); //initialize passport which helps to protect routes
+app.use(cookieSession({ //for sso. stores the session data on the cookie sent to the client
     name: 'session',
     maxAge: 1000 * 60 * 60 * 24, //1 day
     keys: [COOKIE_KEY]
 }));
-app.use(passport.session()); //for google sso
+app.use(passport.session()); //for sso. Helps to modify the user stored in the session into a user object
 
 //import routes
 const authRoutes = require('./routes/auth');

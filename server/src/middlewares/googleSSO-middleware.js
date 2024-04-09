@@ -1,4 +1,4 @@
-/* This is called from src/index.js when the user selects their email to attempt sso. It manages the user in the database and serializes/deserializes the user. */
+/* This is called from src/index.js when the user selects their email to attempt sso. It manages the user in the database and serializes/deserializes the user. It protects routes by ensuring you can return a valid user stored in the database */
 
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
